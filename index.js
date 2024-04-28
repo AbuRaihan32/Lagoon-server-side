@@ -26,12 +26,23 @@ async function run() {
         await client.connect();
 
         const userAddedCollection = client.db("UAddedDB").collection("UAddedSpots");
+        const spotCollection = client.db("spotsDB").collection("spots");
 
-        app.post('/userAddedSpot', async(req, res)=>{
-            const newSpot = req.body;
-            const result = await spotsCollection.insertOne(newSpot);
+        // get user for home page
+        app.get('/homeSpots', async(req, res)=>{
+            const cursor = spotCollection.find();
+            const result = await cursor.toArray();
             res.send(result)
         })
+        
+
+        // Post user
+        app.post('/userAddedSpot', async(req, res)=>{
+            const newSpot = req.body;
+            const result = await userAddedCollection.insertOne(newSpot);
+            res.send(result)
+        })
+
 
 
 
