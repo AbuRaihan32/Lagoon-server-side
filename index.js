@@ -28,9 +28,16 @@ async function run() {
         const userAddedCollection = client.db("UAddedDB").collection("UAddedSpots");
         const spotCollection = client.db("spotsDB").collection("spots");
 
-        // get user for home page
+        // get spots for home page
         app.get('/homeSpots', async(req, res)=>{
             const cursor = spotCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        // get spots added by user
+        app.get('/UAddedSpots', async(req, res)=>{
+            const cursor = userAddedCollection.find();
             const result = await cursor.toArray();
             res.send(result)
         })
