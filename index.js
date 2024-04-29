@@ -50,12 +50,24 @@ async function run() {
             res.send(result)
         })
 
+
+        // get spot by email:
+        app.get('/userSpots/:email', async(req,res)=>{
+            const email = req.params.email;
+            const query = {User_Email: email}
+            const result = await userAddedCollection.find(query).toArray();
+            res.send(result)
+        })
+
         // Post user
         app.post('/userAddedSpot', async(req, res)=>{
             const newSpot = req.body;
             const result = await userAddedCollection.insertOne(newSpot);
             res.send(result)
         })
+
+        // update Spot
+        app.put('')
 
 
 
