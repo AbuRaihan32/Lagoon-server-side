@@ -50,6 +50,14 @@ async function run() {
             res.send(result)
         })
 
+        // get single UserSpot by id
+        app.get('/userSpot/:id', async(req, res)=>{
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const result = await userAddedCollection.findOne(query);
+            res.send(result)
+        })
+
 
         // get spot by email:
         app.get('/userSpots/:email', async(req,res)=>{
@@ -67,7 +75,29 @@ async function run() {
         })
 
         // update Spot
-        app.put('')
+        app.patch('/userSpot/:id', async(req, res)=>{
+            const id = req.params.id;
+            const spot = req.body;
+            const filter = {_id: new ObjectId(id)};
+            const options = { upsert: true };
+            const updatedSpot = {
+                $set:{
+                    image: spot.image, 
+                    tourists_spot_name: spot.tourists_spot_name, 
+                    country_Name: spot.country_Name, 
+                    location: spot.location, 
+                    short_description: spot.short_description, 
+                    average_cost: spot.average_cost, 
+                    seasonality: spot.seasonality, 
+                    travel_time: spot.travel_time, 
+                    totalVisitorsPerYear: spot.totalVisitorsPerYear, 
+                    User_Email: spot.User_Email, 
+                    User_Name: spot.User_Name
+                }
+            }
+            const result = await userAddedCollection.updateOne(filter, updatedSpot, options)
+            res.send(result)
+        })
 
 
 
