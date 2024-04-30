@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
 
         const userAddedCollection = client.db("UAddedDB").collection("UAddedSpots");
         const spotCollection = client.db("spotsDB").collection("spots");
@@ -60,8 +60,9 @@ async function run() {
 
 
         // get spot by email:
-        app.get('/userSpots/:email', async(req,res)=>{
+        app.get('/spotsByEmail/:email', async(req,res)=>{
             const email = req.params.email;
+            console.log(email);
             const query = {User_Email: email}
             const result = await userAddedCollection.find(query).toArray();
             res.send(result)
@@ -99,6 +100,15 @@ async function run() {
             res.send(result)
         })
 
+        // delete operation
+
+        app.delete('/delete/:id', async(req, res)=>{
+            const id = req.params.id;
+            console.log(id);
+            const query = {_id: new ObjectId(id)};
+            const result = await userAddedCollection.deleteOne(query)
+            res.send(result);
+        })
 
 
 
@@ -106,8 +116,8 @@ async function run() {
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
